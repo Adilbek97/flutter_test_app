@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test_app/core/src/colors.dart';
@@ -9,76 +8,49 @@ import 'package:flutter_test_app/data/models/User.dart';
 import 'package:flutter_test_app/di.dart';
 import 'package:flutter_test_app/presentation/pages/message_page.dart';
 
-late final DependencyInjection di;
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  di = DependencyInjection.getDi();
-  di.setupDi();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-      color: Colors.white,
-      child: SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 14,),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text("Чаты",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  fontFamily: 'Gilroy',
-                  color: darkGreyColor,
-                  fontSize: fontSize32,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
+        body: Container(
+            color: Colors.white,
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 14,),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text("Чаты",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Gilroy',
+                        color: darkGreyColor,
+                        fontSize: fontSize32,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 6,),
+                  _searchBar(),
+                  const SizedBox(height: 24,),
+                  _divider(),
+                  _itemsList(),
+                ],
               ),
-            ),
-          ),
-          const SizedBox(height: 6,),
-          _searchBar(),
-          const SizedBox(height: 24,),
-          _divider(),
-          _itemsList(),
-        ],
-        ),
-      )
-      )
+            )
+        )
     );
   }
 
@@ -96,15 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8),
                 separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 0,width: 0,),
                 itemBuilder: (BuildContext context, int index){
-                final User user = User(userName: data.docs[index].get("userName"),
+                  final User user = User(userName: data.docs[index].get("userName"),
                       message: data.docs[index].get("message"),
                       date: data.docs[index].get("date"),
                       isMy: data.docs[index].get("isMy"));
                   return Padding(
                     padding: const EdgeInsets.only(right: 10,left: 10),
                     child: _listItem(
-                        index: index,
-                        user: user,
+                      index: index,
+                      user: user,
                     ),
                   );
                 }
@@ -192,25 +164,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _myMessage(String message) {
     return Row(
-      children: [
-      const Text("Вы: ",
-      style: TextStyle(
-        fontFamily: 'Gilroy',
-        color: myMessageColor,
-        fontSize: fontSize12,
-        fontWeight: FontWeight.w500,
-        fontStyle: FontStyle.normal,
-      )),
-      Text(message,
-      style: const TextStyle(
-        fontFamily: 'Gilroy',
-        color: messageDateColor,
-        fontSize: fontSize12,
-        fontWeight: FontWeight.w500,
-        fontStyle: FontStyle.normal,
-      )
-      )
-      ]
+        children: [
+          const Text("Вы: ",
+              style: TextStyle(
+                fontFamily: 'Gilroy',
+                color: myMessageColor,
+                fontSize: fontSize12,
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.normal,
+              )),
+          Text(message,
+              style: const TextStyle(
+                fontFamily: 'Gilroy',
+                color: messageDateColor,
+                fontSize: fontSize12,
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.normal,
+              )
+          )
+        ]
     );
   }
 
